@@ -1,0 +1,10 @@
+#Erik Desilets, 8 Feb 2022, CYB-300-T3415
+
+#Variable for holding the OU for a Sales user search
+$OUPath = 'OU=Sales,DC=PRACTICELABS,DC=COM'
+#Variable for planned export text document file in Sales Last Logon folder
+$ExportFile = 'C:\Sales Last Logon\user_last_logon.txt'
+
+#Repitition and Compound statement / Gets all users from the Sales OU and then takes their name and creates another object 'LastLogon' which pulls information in the datetime format
+#Publishes the information to the LastLogon object. Each Item is then written to a text document during the Out-File command.
+Get-ADUser -Filter * -SearchBase $OUPath -Properties LastLogon | Select-Object Name,@[Name='LastLogon';Expression={[DateTime]::FromFileTime($_.LastLogon)}} | Out-File -Filepath $ExportFile
