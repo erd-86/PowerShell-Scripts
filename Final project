@@ -1,0 +1,20 @@
+#Project was to look at six objectives and build a script to accomplish them all in one executable .ps1 file. 
+
+#Renames Computer
+Rename-Computer -NewName "E-R-D"
+
+#Sets new timezone to MST
+Set-TimeZone -Name 'Mountain Standard Time'
+
+#Shows all the services that are currently running on the computer
+Get-Service | Where-Object {$_.Status -eq "Running"}
+
+#Forces the printer spooler service to stop on the computer
+Stop-Service -Name Spooler -Force
+
+#Sets the screensaver to active with the value of 1 and the screensaver to start once 3 minutes occurs
+New-ItemProperty -Path 'HKCU:\Control Panel\Desktop' -Name ScreenSaveActive -Value 1 - PropertyType string
+New-ItemProperty -Path 'HKCU:\Control Panel\Desktop' -Name ScreenSaveTimeOut -Value 180 -PropertyType DWord
+
+#Gathers the last 50 inputs from the security log file and outputs them to a new text document on the administrators desktop
+Get-EventLog -logname Security -Newest 50 | Outfile -Filepath C:\Users\Administrator\Desktop\SecurityLog_ERD.txt
